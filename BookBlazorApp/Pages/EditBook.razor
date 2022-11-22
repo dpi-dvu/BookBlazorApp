@@ -1,0 +1,59 @@
+﻿@page "/EditBook/{Id}"
+@using BookBlazorApp.Data
+@inject BookService bookService
+@inject NavigationManager navigationManager
+<h3>Edit Book</h3>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <input form="Name" class="form-control" @bind="@obj.Id" />
+            </div>
+            <div class="form-group">
+                <label for="Title" class="control-label">Title</label>
+                <input form="Title" class="form-control" @bind="@obj.Title" />
+            </div>
+            <div class="form-group">
+                <label for="Author" class="control-label">Author</label>
+                <input form="Author" class="form-control" @bind="@obj.Author" />
+            </div>
+            <div class="form-group">
+                <label for="Genre" class="control-label">Genre</label>
+                <input form="Genre" class="form-control" @bind="@obj.Genre" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@UpdateBook" value="Update" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    Book obj = new Book();
+    protected override async Task OnInitializedAsync()
+    {
+        obj = await Task.Run(() => bookService.GetBookAsync(Convert.ToInt32(Id)));    
+    }
+
+    protected async void UpdateBook()
+    {
+        await bookService.UpdateBookAsync(obj);
+        navigationManager.NavigateTo("BooksIndex");
+    }
+
+    void Cancel()
+    {
+        navigationManager.NavigateTo("BooksIndex");
+    }
+}

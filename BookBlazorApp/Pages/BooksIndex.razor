@@ -1,0 +1,53 @@
+﻿@page "/BooksIndex"
+@using BookBlazorApp.Data;
+@inject BookService bookService
+
+<NavLink class="nav-link" href="AddBook">
+    <span class="oi oi-plus" aria-hidden="true">Add New</span>
+</NavLink>
+
+<h1>Book Info</h1>
+@if (BookObj is null)
+{
+    <p><em>Loading...!</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Book Id</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var book in BookObj)
+            {
+                <tr>
+                    <td>@book.Id</td>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Genre</td>
+                    <td>
+                        <a class="nav-link" href="EditBook/@book.Id">
+                            <span class="oi oi-pencil" aria-hidden="true">Edit</span>    
+                        </a>
+                        <a class="nav-link" href="Delete/@book.Id">
+                            <span class="oi oi-trash" aria-hidden="true">Delete</span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>}
+
+@code {
+    List<Book>? BookObj;
+
+    protected override async Task OnInitializedAsync()
+    {
+        BookObj = await Task.Run(() => bookService.GetAllBooksAsync());
+    }
+}

@@ -1,0 +1,63 @@
+﻿@page "/Delete/{Id}"
+@using BookBlazorApp.Data
+@inject BookService bookService
+@inject NavigationManager navigationManager
+
+<h2>Delete Book</h2>
+<hr />
+
+<h3>Are you sure want to delete this?</h3>
+
+<form>
+    <div class="row">
+        <div class=" col-md-8">
+            <div class="form-group">
+                <label>Book Id:</label>
+                <label>@obj.Id</label>
+            </div>
+            <div class="form-group">
+                <label>Title:</label>
+                <label>@obj.Title</label>
+            </div>
+            <div class="form-group">
+                <label>Author:</label>
+                <label>@obj.Author</label>
+            </div>
+            <div class="form-group">
+                <label>Genre:</label>
+                <label>@obj.Genre</label>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-danger" @onclick="@DeleteBook" value="Delete" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    Book obj = new Book();
+
+    protected override async Task OnInitializedAsync()
+    {
+        obj = await Task.Run(() => bookService.GetBookAsync(Convert.ToInt32(Id)));
+    }
+    protected async void DeleteBook()
+    {
+        await bookService.DeleteBookAsync(obj);
+        navigationManager.NavigateTo("BooksIndex");
+    }
+    void Cancel()
+    {
+        navigationManager.NavigateTo("BooksIndex");
+    }
+
+}
