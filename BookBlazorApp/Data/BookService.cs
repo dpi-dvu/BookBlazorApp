@@ -28,14 +28,14 @@ namespace BookBlazorApp.Data
             return await _appDbContext.Books.FirstOrDefaultAsync(b => b.Id.Equals(Id));
         }
 
-        public async Task<bool> UpdateBookAsync(Book book)
+        public async Task<bool> UpdateBookAsync(Book? book)
         {
             _appDbContext.Books.Update(book);
             await _appDbContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> DeleteBookAsync(Book book)
+        public async Task<bool> DeleteBookAsync(Book? book)
         {
             _appDbContext.Books.Remove(book);
             await _appDbContext.SaveChangesAsync();
