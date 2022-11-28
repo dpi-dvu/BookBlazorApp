@@ -41,9 +41,17 @@
     [Parameter]
     public string? Id { get; set; }
     Book? obj = new Book();
+
     protected override async Task OnInitializedAsync()
     {
-        obj = await Task.Run(() => bookService.GetBookAsync(Convert.ToInt32(Id)));    
+        try
+        {
+            obj = await Task.Run(() => bookService.GetBookAsync(Convert.ToInt32(Id)));
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("No book was found at this Id number.");
+        }
     }
 
     protected async void UpdateBook()
