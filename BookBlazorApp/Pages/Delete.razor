@@ -42,9 +42,9 @@
 
 @code {
     [Parameter]
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
-    Book obj = new Book();
+    Book? obj = new Book();
 
     protected override async Task OnInitializedAsync()
     {
